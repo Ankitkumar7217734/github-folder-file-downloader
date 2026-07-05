@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Folder & File Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </div>
+        <div>
+          <h1>GitHub Downloader</h1>
+          <span>Folder & file downloads</span>
+        </div>
+      </div>
+
+      <nav class="topbar-nav" aria-label="Primary">
+        <a href="#download">Download</a>
+        <a href="#examples">Examples</a>
+        <a href="#about">About</a>
+      </nav>
+
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg id="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg id="sun-icon" viewBox="0 0 24 24" style="display:none"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zM12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="page">
+    <main id="download" class="card">
+      <div class="hero">
+        <h2>Download a specific file or folder</h2>
+        <p>Paste a GitHub URL and download only the item you need, packaged neatly as a file or ZIP.</p>
+      </div>
+
+      <form id="download-form">
+        <div class="input-shell">
+          <input
+            type="url"
+            id="github-url"
+            placeholder="https://github.com/owner/repo/tree/main/src/components"
+            required
+            autocomplete="off"
+            aria-label="GitHub URL"
+          />
+          <button type="submit" class="btn" id="download-btn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download
+          </button>
+          <button type="button" class="btn btn-secondary" id="clear-btn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            Clear
+          </button>
+        </div>
+
+        <div class="quick-tags" id="quick-tags">
+          <button type="button" class="quick-tag" data-url="https://github.com/facebook/react/tree/main/packages/react">React /packages/react</button>
+          <button type="button" class="quick-tag" data-url="https://github.com/tailwindlabs/tailwindcss/tree/master/src">Tailwind /src</button>
+          <button type="button" class="quick-tag" data-url="https://github.com/facebook/react/blob/main/README.md">React README.md</button>
+          <button type="button" class="quick-tag" data-url="https://github.com/microsoft/vscode/tree/main/src/vs/base/browser">VS Code browser</button>
+        </div>
+      </form>
+
+      <div id="preview" class="preview">
+        <div class="repo-card">
+          <div class="repo-avatar" id="repo-avatar"></div>
+          <div class="repo-meta">
+            <h3 id="repo-name">owner/repo</h3>
+            <p id="repo-path">path/to/item</p>
+            <div class="repo-stats">
+              <span class="badge" id="type-badge">Folder</span>
+              <span class="repo-stat" id="file-count"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg> 0 files</span>
+              <span class="repo-stat" id="total-size"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> 0 B</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tree" id="tree">
+          <div class="tree-header">
+            <span id="tree-title">Contents</span>
+            <span id="tree-count">0 items</span>
+          </div>
+          <div id="tree-body"></div>
+        </div>
+      </div>
+
+      <div id="progress-card" class="progress-card">
+        <div class="progress-top">
+          <span class="progress-label" id="progress-label">Preparing download…</span>
+          <span class="progress-percent" id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="progress-files">0 of 0 files</span>
+          <span id="progress-size">0 B</span>
+        </div>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span id="status-text"></span>
+      </div>
+
+      <p class="note">
+        <strong>Public repositories only.</strong> No authentication required, so GitHub's unauthenticated rate limit applies (60 requests/hour). Folders are fetched file-by-file and zipped in your browser, which can take a moment for large directories.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <section class="footer-block" id="examples">
+          <h3>Example URLs</h3>
+          <p class="footer-block-desc">Click any example to fill the download field above.</p>
+          <div class="example-list">
+            <button type="button" class="example" data-url="https://github.com/facebook/react/tree/main/packages/react">
+              <span class="example-kind example-kind-folder">Folder</span>
+              <span class="example-url">https://github.com/facebook/react/tree/main/packages/react</span>
+              <span class="example-action">Use</span>
+            </button>
+            <button type="button" class="example" data-url="https://github.com/facebook/react/blob/main/README.md">
+              <span class="example-kind example-kind-file">File</span>
+              <span class="example-url">https://github.com/facebook/react/blob/main/README.md</span>
+              <span class="example-action">Use</span>
+            </button>
+            <button type="button" class="example" data-url="https://github.com/tailwindlabs/tailwindcss/tree/master/src">
+              <span class="example-kind example-kind-folder">Folder</span>
+              <span class="example-url">https://github.com/tailwindlabs/tailwindcss/tree/master/src</span>
+              <span class="example-action">Use</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="footer-block" id="about">
+          <h3>About</h3>
+          <p>
+            GitHub Downloader fetches only the file or folder you need from a public GitHub repository.
+            Files are downloaded directly; folders are collected and packaged into a ZIP archive in your browser.
+          </p>
+          <p class="footer-block-meta">
+            This tool is not affiliated with GitHub. It uses the public GitHub API and raw content endpoints.
+          </p>
+        </section>
+      </div>
+
+      <div class="footer-bottom">
+        <span>GitHub Downloader</span>
+        <span>Built for quick, focused downloads.</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
