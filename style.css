@@ -1,8 +1,8 @@
 :root {
-  --bg: #0f172a;
-  --bg-soft: #111827;
-  --card: rgba(17, 24, 39, 0.85);
-  --card-solid: #111827;
+  --bg: #000000;
+  --bg-soft: #1a1a1a;
+  --card: rgba(0, 0, 0, 0.85);
+  --card-solid: #1a1a1a;
   --text: #f8fafc;
   --muted: #94a3b8;
   --accent: #3b82f6;
@@ -14,7 +14,7 @@
   --error: #ef4444;
   --warning: #f59e0b;
   --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  --input-bg: #0b1021;
+  --input-bg: #000000;
 }
 
 [data-theme="light"] {
