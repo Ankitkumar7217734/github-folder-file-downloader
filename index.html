@@ -24,13 +24,11 @@
           <span>Folder & file downloads</span>
         </div>
       </div>
-
       <nav class="topbar-nav" aria-label="Primary">
         <a href="#download">Download</a>
         <a href="#examples">Examples</a>
         <a href="#about">About</a>
       </nav>
-
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
         <svg id="moon-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         <svg id="sun-icon" viewBox="0 0 24 24" style="display:none"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zM12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -39,7 +37,7 @@
   </header>
 
   <div class="page">
-    <main id="download" class="card">
+    <main id="download" class="full-card">
       <div class="hero">
         <h2>Download a specific file or folder</h2>
         <p>Paste a GitHub URL and download only the item you need, packaged neatly as a file or ZIP.</p>
@@ -63,13 +61,6 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
             Clear
           </button>
-        </div>
-
-        <div class="quick-tags" id="quick-tags">
-          <button type="button" class="quick-tag" data-url="https://github.com/facebook/react/tree/main/packages/react">React /packages/react</button>
-          <button type="button" class="quick-tag" data-url="https://github.com/tailwindlabs/tailwindcss/tree/master/src">Tailwind /src</button>
-          <button type="button" class="quick-tag" data-url="https://github.com/facebook/react/blob/main/README.md">React README.md</button>
-          <button type="button" class="quick-tag" data-url="https://github.com/microsoft/vscode/tree/main/src/vs/base/browser">VS Code browser</button>
         </div>
       </form>
 
@@ -120,42 +111,51 @@
       </p>
     </main>
 
-    <footer class="site-footer">
-      <div class="footer-grid">
-        <section class="footer-block" id="examples">
-          <h3>Example URLs</h3>
-          <p class="footer-block-desc">Click any example to fill the download field above.</p>
-          <div class="example-list">
-            <button type="button" class="example" data-url="https://github.com/facebook/react/tree/main/packages/react">
-              <span class="example-kind example-kind-folder">Folder</span>
-              <span class="example-url">https://github.com/facebook/react/tree/main/packages/react</span>
-              <span class="example-action">Use</span>
-            </button>
-            <button type="button" class="example" data-url="https://github.com/facebook/react/blob/main/README.md">
-              <span class="example-kind example-kind-file">File</span>
-              <span class="example-url">https://github.com/facebook/react/blob/main/README.md</span>
-              <span class="example-action">Use</span>
-            </button>
-            <button type="button" class="example" data-url="https://github.com/tailwindlabs/tailwindcss/tree/master/src">
-              <span class="example-kind example-kind-folder">Folder</span>
-              <span class="example-url">https://github.com/tailwindlabs/tailwindcss/tree/master/src</span>
-              <span class="example-action">Use</span>
-            </button>
-          </div>
-        </section>
+    <section class="examples-wide" id="examples">
+      <header class="examples-wide-header">
+        <h2>Example URLs</h2>
+        <p>Click any example to fill the download field above.</p>
+      </header>
+      <div class="examples-wide-list">
+        <button type="button" class="example-wide" data-url="https://github.com/facebook/react/tree/main/packages/react">
+          <span class="example-badge example-badge-folder">Folder</span>
+          <span class="example-url">https://github.com/facebook/react/tree/main/packages/react</span>
+          <span class="example-action">Use</span>
+        </button>
+        <button type="button" class="example-wide" data-url="https://github.com/facebook/react/blob/main/README.md">
+          <span class="example-badge example-badge-file">File</span>
+          <span class="example-url">https://github.com/facebook/react/blob/main/README.md</span>
+          <span class="example-action">Use</span>
+        </button>
+        <button type="button" class="example-wide" data-url="https://github.com/tailwindlabs/tailwindcss/tree/master/src">
+          <span class="example-badge example-badge-folder">Folder</span>
+          <span class="example-url">https://github.com/tailwindlabs/tailwindcss/tree/master/src</span>
+          <span class="example-action">Use</span>
+        </button>
+        <button type="button" class="example-wide" data-url="https://github.com/microsoft/vscode/tree/main/src/vs/base/browser">
+          <span class="example-badge example-badge-folder">Folder</span>
+          <span class="example-url">https://github.com/microsoft/vscode/tree/main/src/vs/base/browser</span>
+          <span class="example-action">Use</span>
+        </button>
+      </div>
+    </section>
 
-        <section class="footer-block" id="about">
+    <footer class="site-footer" id="about">
+      <div class="footer-inner">
+        <div class="footer-block">
           <h3>About</h3>
           <p>
             GitHub Downloader fetches only the file or folder you need from a public GitHub repository.
             Files are downloaded directly; folders are collected and packaged into a ZIP archive in your browser.
           </p>
-          <p class="footer-block-meta">
+        </div>
+        <div class="footer-block">
+          <h3>Disclaimer</h3>
+          <p>
             This tool is not affiliated with GitHub. It uses the public GitHub API and raw content endpoints.
           </p>
-        </section>
+        </div>
       </div>
-
       <div class="footer-bottom">
         <span>GitHub Downloader</span>
         <span>Built for quick, focused downloads.</span>
