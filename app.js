@@ -100,14 +100,22 @@ async function fetchRawText(url) {
   return response.text();
 }
 
+function originalBaseName(path, fallback) {
+  const name = (path || '').split('/').filter(Boolean).pop();
+  return name || fallback;
+}
+
 function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
+  link.href = url;
   link.download = filename;
+  link.rel = 'noopener';
   document.body.appendChild(link);
   link.click();
   link.remove();
-  URL.revokeObjectURL(link.href);
+  // Revoking immediately can make browsers save a generic/UUID name instead.
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
 function updatePreview(parsed, repoInfo, items = []) {
@@ -213,9 +221,10 @@ async function downloadFile(parsed) {
   if (!response.ok) throw new Error(`Failed to download file (${response.status})`);
 
   const blob = await response.blob();
+  const fileName = originalBaseName(path, data.name);
   setProgress(100, 'Saving file…', '1 file', formatBytes(blob.size));
-  downloadBlob(blob, data.name);
-  setStatus(`Downloaded ${data.name}`, 'success');
+  downloadBlob(blob, fileName);
+  setStatus(`Downloaded ${fileName}`, 'success');
 }
 
 async function collectFiles(owner, repo, ref, pathPrefix) {
@@ -244,6 +253,7 @@ async function downloadFolder(parsed) {
     throw new Error('No files found at this path.');
   }
 
+  const folderName = originalBaseName(path, repo);
   const zip = new JSZip();
   const total = files.length;
   let completed = 0;
@@ -259,7 +269,8 @@ async function downloadFolder(parsed) {
     await Promise.all(batch.map(async (file) => {
       const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/${path}/${file.relativePath}`;
       const content = await fetchRawText(rawUrl);
-      zip.file(file.relativePath, content);
+      // Keep original folder name as the ZIP root directory.
+      zip.file(`${folderName}/${file.relativePath}`, content);
       totalBytes += new Blob([content]).size;
       completed++;
       setProgress(
@@ -272,8 +283,10 @@ async function downloadFolder(parsed) {
   }
 
   setProgress(95, 'Creating ZIP archive…', `${total} files`, formatBytes(totalBytes));
-  const blob = await zip.generateAsync({ type: 'blob' });
-  const folderName = path.split('/').pop() || `${repo}-${ref}`;
+  const blob = await zip.generateAsync({
+    type: 'blob',
+    mimeType: 'application/zip',
+  });
   downloadBlob(blob, `${folderName}.zip`);
 
   setProgress(100, 'Download complete', `${total} files`, formatBytes(totalBytes));
