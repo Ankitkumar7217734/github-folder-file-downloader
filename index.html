@@ -39,12 +39,17 @@
   <div class="page">
     <main id="download" class="full-card">
       <div class="hero">
-        <h2>Download a specific file or folder</h2>
-        <p>Paste a GitHub URL and download only the item you need, packaged neatly as a file or ZIP.</p>
+        <p class="hero-kicker">Public GitHub · file or folder</p>
+        <h2>Download only what you need</h2>
+        <p>Paste a GitHub URL. Files save directly; folders arrive as a ZIP with the original name.</p>
       </div>
 
       <form id="download-form">
+        <label class="field-label" for="github-url">GitHub URL</label>
         <div class="input-shell">
+          <span class="input-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+          </span>
           <input
             type="url"
             id="github-url"
@@ -88,16 +93,18 @@
       </div>
 
       <div id="progress-card" class="progress-card">
-        <div class="progress-top">
-          <span class="progress-label" id="progress-label">Preparing download…</span>
-          <span class="progress-percent" id="progress-percent">0%</span>
-        </div>
-        <div class="progress-bar">
-          <div id="progress-fill" class="progress-fill"></div>
-        </div>
-        <div class="progress-meta">
-          <span id="progress-files">0 of 0 files</span>
-          <span id="progress-size">0 B</span>
+        <div class="progress-panel">
+          <div class="progress-top">
+            <span class="progress-label" id="progress-label">Preparing download…</span>
+            <span class="progress-percent" id="progress-percent">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progress-fill" class="progress-fill"></div>
+          </div>
+          <div class="progress-meta">
+            <span id="progress-files">0 of 0 files</span>
+            <span id="progress-size">0 B</span>
+          </div>
         </div>
       </div>
 
@@ -113,8 +120,8 @@
 
     <section class="examples-wide" id="examples">
       <header class="examples-wide-header">
-        <h2>Example URLs</h2>
-        <p>Click any example to fill the download field above.</p>
+        <h2>Try an example</h2>
+        <p>Click any row to fill the field above and preview the download.</p>
       </header>
       <div class="examples-wide-list">
         <button type="button" class="example-wide" data-url="https://github.com/facebook/react/tree/main/packages/react">
